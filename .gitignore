@@ -1,0 +1,8 @@
+/pk/results/
+/.idea
+/datasets/AES_RD_dataset
+/datasets/ASCAD_dataset
+/datasets/DPAv4_dataset
+/datasets/AES_HD_dataset
+/datasets/ascad-variable.h5
+/src/__pycache__
