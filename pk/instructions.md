@@ -23,11 +23,15 @@ Also, we will implement early stopping based on validation accuracy and rerun ex
 python version used: `3.7.10`
 
 ```cmd
-pip install numpy==1.19.5 
+conda create --name eff_cnn python=3.7
+```
+
+```cmd
+pip install numpy==1.18.5 
 pip install tqdm==4.41.1 
 pip install h5py==2.10.0 
 pip install matplotlib==3.2.2 
-pip install tensorflow==1.15.2 
+pip install tensorflow==1.15.5
 pip install keras==2.3.1 
 pip install scikit-learn==0.24.2 
 pip install kaleido==0.2.1 
