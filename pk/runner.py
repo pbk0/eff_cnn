@@ -35,16 +35,15 @@ from src.clr import OneCycleLR
 from src import dataLoaders
 from src import preproces
 from src import models
-# from src import mt
+
+# noinspection PyBroadException
+try:
+    from src import mt
+except Exception:
+    ...
 
 IS_ON_NXDI = (pathlib.Path.home() / "__is_on_nxdi__").exists()
 ROOT_DIR = pathlib.Path(__file__).parent
-if IS_ON_NXDI:
-    RESULTS_DIR = pathlib.Path(os.environ["VAPATH"] + "/eff_cnn")
-    if not RESULTS_DIR.exists():
-        RESULTS_DIR.mkdir(exist_ok=True, parents=True)
-else:
-    RESULTS_DIR = ROOT_DIR / "results"
 RESULTS_DIR = ROOT_DIR / "results"
 PLOTS_DIR = ROOT_DIR / "plots"
 REPORTS_DIR = ROOT_DIR / "reports"
@@ -372,7 +371,7 @@ class ExperimentType(enum.Enum):
 
 MODELS_TO_TRY = [
     Model.s_eff_cnn_id, Model.s_eff_cnn_hw,
-    # Model.aisy_mlp_id, Model.aisy_mlp_hw,
+    Model.aisy_mlp_id, Model.aisy_mlp_hw,
     # Model.ascad_cnn2,
 ]
 DATASETS_TO_TRY = [
