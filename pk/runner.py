@@ -371,7 +371,8 @@ class ExperimentType(enum.Enum):
 
 
 MODELS_TO_TRY = [
-    Model.s_eff_cnn_id, Model.aisy_mlp_id, Model.s_eff_cnn_hw, Model.aisy_mlp_hw,
+    Model.s_eff_cnn_id, Model.s_eff_cnn_hw,
+    # Model.aisy_mlp_id, Model.aisy_mlp_hw,
     # Model.ascad_cnn2,
 ]
 DATASETS_TO_TRY = [
