@@ -3,6 +3,7 @@ import zipfile
 import itertools
 import pandas as pd
 import tqdm
+import math
 import sys
 import pathlib
 _home = pathlib.Path.home()
@@ -1224,6 +1225,9 @@ class Experiment(t.NamedTuple):
         # ------------------------------------------------- 02.02
         # compute y offset
         _max = _report_df.traces_needed_range_max.replace(np.inf, np.nan).max()
+        # when all models have failed then _max will be nan
+        if math.isnan(_max):
+            _max = _report_df.traces_needed_range_min.max()
         _min = _report_df.traces_needed_range_min.min()
         _y_offset = (_max - _min) * 0.3
         _y_offset += _max

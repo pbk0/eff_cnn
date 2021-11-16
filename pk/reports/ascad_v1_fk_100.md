@@ -22,7 +22,7 @@
 ### Average ranks, train/val loss and train/val accuracy 
 
 
-|s_eff_cnn_id<br><span style='color:red'> **6.00 % FAILED** </span>|s_eff_cnn_hw<br><span style='color:red'> **16.00 % FAILED** </span>|
+|s_eff_cnn_id<br><span style='color:red'> **10.00 % FAILED** </span>|s_eff_cnn_hw<br><span style='color:red'> **4.00 % FAILED** </span>|
 |---|---|
 |![Average Rank](../plots/original/ascad_v1_fk_100/s_eff_cnn_id/average_rank.svg)|![Average Rank](../plots/original/ascad_v1_fk_100/s_eff_cnn_hw/average_rank.svg)|
 |![Train Loss](../plots/original/ascad_v1_fk_100/s_eff_cnn_id/train_loss.svg)|![Train Loss](../plots/original/ascad_v1_fk_100/s_eff_cnn_hw/train_loss.svg)|
