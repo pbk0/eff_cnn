@@ -1,3 +1,4 @@
+import io
 import sys
 import zipfile
 import itertools
@@ -282,17 +283,17 @@ class Model(enum.Enum):
         return False
 
     @property
-    def is_mcovc(self) -> bool:
-        if self.name.startswith("mcovc"):
+    def is_mt(self) -> bool:
+        if self.name.startswith("mt"):
             return True
         else:
             return False
 
     # noinspection DuplicatedCode
     def make_fn(self, dataset: Dataset) -> t.Callable:
-        if self.is_mcovc:
+        if self.is_mt:
             raise Exception(
-                "mcovc models are not supported"
+                "mt models are not supported"
             )
         if self in [self.ascad_mlp, ]:
             if dataset in [Dataset.ascad_v1_fk_0, Dataset.ascad_v1_fk_50,
@@ -367,7 +368,6 @@ class ExperimentType(enum.Enum):
     original = enum.auto()
     early_stopping = enum.auto()
     over_fit = enum.auto()
-    mcovc = enum.auto()
 
 
 MODELS_TO_TRY = [
@@ -378,11 +378,11 @@ MODELS_TO_TRY = [
 DATASETS_TO_TRY = [
     Dataset.ascad_v1_fk_0, Dataset.ascad_v1_vk_0,
     Dataset.ascad_v1_fk_0_noisy, Dataset.ascad_v1_vk_0_noisy,
-    Dataset.ascad_v1_fk_50, Dataset.ascad_v1_fk_100,
+    # Dataset.ascad_v1_fk_50, Dataset.ascad_v1_fk_100,
 ]
 EXPERIMENT_TYPES_TO_TRY = [
     ExperimentType.original,
-    ExperimentType.early_stopping,
+    # ExperimentType.early_stopping,
     # ExperimentType.over_fit,
 ]
 DEFAULT_PARAMS = {
@@ -604,7 +604,7 @@ class Experiment(t.NamedTuple):
             )
 
     @property
-    def ranks(self) -> np.ndarray:
+    def _ranks(self) -> np.ndarray:
         try:
             # noinspection PyTypeChecker
             return np.load(self.ranks_file_path.resolve().as_posix())
@@ -613,7 +613,7 @@ class Experiment(t.NamedTuple):
             raise e
 
     @property
-    def losses(self) -> t.Tuple[np.ndarray, np.ndarray]:
+    def _losses(self) -> t.Tuple[np.ndarray, np.ndarray]:
         with open(self.history_file_path.as_posix(), 'rb') as file_pi:
             history = pickle.load(file_pi)
         train_loss = history['loss']
@@ -621,7 +621,7 @@ class Experiment(t.NamedTuple):
         return train_loss, val_loss
 
     @property
-    def accuracies(self) -> t.Tuple[np.ndarray, np.ndarray]:
+    def _accuracies(self) -> t.Tuple[np.ndarray, np.ndarray]:
         with open(self.history_file_path.as_posix(), 'rb') as file_pi:
             history = pickle.load(file_pi)
         if 'acc' in history.keys():
@@ -631,6 +631,40 @@ class Experiment(t.NamedTuple):
             train_acc = history['accuracy']
             val_acc = history['val_accuracy']
         return train_acc, val_acc
+
+    @property
+    def results_from_zip(self) -> t.Dict[str, np.ndarray]:
+        _zip_file_path = ROOT_DIR / "results.zip"
+
+        _npz = np.load(_zip_file_path.as_posix())
+        _history = pickle.loads(_npz[f"{self.archive_path}/history.pickle"])
+
+        if 'ranks' in _history.keys():
+            # case to handle mt where ranks are computed at some points
+            assert self.model.is_mt, "was expecting a `mt` model "
+            _ranks = _history['ranks']
+        else:
+            _ranks = _npz[f"{self.archive_path}/ranks.npy"]
+
+        _ret = {
+            "ranks": _ranks,
+            "loss": _history["loss"],
+            "val_loss": _history["val_loss"],
+        }
+
+        if 'acc' in _history.keys():
+            _ret["acc"] = _history["acc"]
+            _ret["val_acc"] = _history["val_acc"]
+        else:
+            _ret["acc"] = _history["accuracy"]
+            _ret["val_acc"] = _history["val_accuracy"]
+
+        return _ret
+
+    @property
+    def archive_path(self) -> str:
+        return f"results/" \
+               f"{self.type.name}/{self.dataset.name}/{self.model.name}/{self.id}"
 
     def dump_plots(self):
         # ---------------------------------------------------- 01
@@ -681,6 +715,43 @@ class Experiment(t.NamedTuple):
             for _ in self.store_dir.iterdir():
                 _.unlink()
             self.store_dir.rmdir()
+
+    @classmethod
+    def get_existing_experiments_from_zip(
+            cls,
+            experiment_type: ExperimentType,
+            dataset: Dataset,
+            model: Model,
+    ) -> t.List["Experiment"]:
+        # -------------------------------------------------------- 01
+        # get zip file
+        _zip_file_path = ROOT_DIR / "results.zip"
+        if _zip_file_path.exists():
+            _zip_file = zipfile.ZipFile(_zip_file_path, 'r')
+        else:
+            raise Exception(f"We cannot find zip file {_zip_file_path}")
+
+        # -------------------------------------------------------- 02
+        # loop over
+        _ret = []
+        for _zip_info in _zip_file.filelist:
+            _archive_start_name = \
+                f"results/{experiment_type.name}/{dataset.name}/{model.name}"
+            if _zip_info.filename.startswith(_archive_start_name):
+                _experiment_id = int(_zip_info.filename.split("/")[-2])
+                _ret.append(
+                    Experiment(
+                        dataset=dataset,
+                        model=model,
+                        id=_experiment_id,
+                        type=experiment_type,
+                    )
+                )
+
+        # -------------------------------------------------------- 03
+        # return
+        return _ret
+
 
     @classmethod
     def get_existing_experiments_on_disk(
@@ -1026,7 +1097,7 @@ class Experiment(t.NamedTuple):
 
     @classmethod
     def report_it_group_experiments(
-            cls, _experiments: t.List["Experiment"], is_mcovc: bool
+            cls, _experiments: t.List["Experiment"], is_mt: bool
     ) -> t.Dict[str, np.ndarray]:
 
         _avg_ranks = []
@@ -1039,12 +1110,16 @@ class Experiment(t.NamedTuple):
 
         for _experiment in _experiments:
 
-            _ranks = _experiment.ranks
+            _results_from_zip = _experiment.results_from_zip
+
+            _ranks = _results_from_zip['ranks']
             _avg_rank = np.mean(_ranks, axis=0)
             _rank_variance = np.var(_ranks, axis=0)
-            _train_loss, _val_loss = _experiment.losses
-            _train_acc, _val_acc = _experiment.accuracies
-            if is_mcovc:
+            _train_loss = _results_from_zip['loss']
+            _val_loss = _results_from_zip['val_loss']
+            _train_acc = _results_from_zip['acc']
+            _val_acc = _results_from_zip['val_acc']
+            if is_mt:
                 _traces_needed_for_rank_0 = np.nan
             else:
                 _traces_needed_for_rank_0 = np.where(_avg_rank <= 0.0)[0]
@@ -1182,8 +1257,8 @@ class Experiment(t.NamedTuple):
             assert len(_filter_report_df) == 1
             _filter_report_df = _filter_report_df.iloc[0]
 
-            # not applicable for mcovc models
-            if _model.is_mcovc:
+            # not applicable for mt models
+            if _model.is_mt:
                 _text = f" Not available "
                 _bgcolor = 'lightgrey'
                 _bordercolor = 'black'
@@ -1429,7 +1504,7 @@ class Experiment(t.NamedTuple):
                 # ------------------------------------------- 04.01
                 # get experiments
                 print("      - reading experiments")
-                _experiments = cls.get_existing_experiments_on_disk(
+                _experiments = cls.get_existing_experiments_from_zip(
                     experiment_type=_type, dataset=_dataset, model=_model,
                 )
                 # if no experiments skip
@@ -1440,7 +1515,7 @@ class Experiment(t.NamedTuple):
                 # group results from all experiments
                 print("      - grouping experiments")
                 _results = cls.report_it_group_experiments(
-                    _experiments, _model.is_mcovc)
+                    _experiments, _model.is_mt)
                 _all_avg_ranks[_model] = _results['avg_ranks']
                 _all_traces_needed_for_rank_0s[_model] = \
                     _results['traces_needed_for_rank_0s']
@@ -1488,7 +1563,7 @@ class Experiment(t.NamedTuple):
             for _model in _all_traces_needed_for_rank_0s.keys():
                 _traces_needed_for_rank_0s = _all_traces_needed_for_rank_0s[_model]
                 _total_experiments = len(_traces_needed_for_rank_0s)
-                if _model.is_mcovc:
+                if _model.is_mt:
                     _failed_experiments = np.nan
                     _failed_percentage = np.nan
                 else:
@@ -1643,7 +1718,7 @@ def _filter_experiments():
         model=Model.aisy_mlp_id,
     )
     for _e in _es:
-        _mean_rank = np.mean(_e.ranks, axis=0)
+        _mean_rank = np.mean(_e.results_from_zip['ranks'], axis=0)
         _where = np.where(_mean_rank <= 0.)[0][0]
         print(_e.id, _where)
 
