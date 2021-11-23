@@ -38,12 +38,6 @@ from src import dataLoaders
 from src import preproces
 from src import models
 
-# noinspection PyBroadException
-try:
-    from src import mt
-except Exception:
-    ...
-
 IS_ON_NXDI = (pathlib.Path.home() / "__is_on_nxdi__").exists()
 ROOT_DIR = pathlib.Path(__file__).parent
 RESULTS_DIR = ROOT_DIR / "results"
