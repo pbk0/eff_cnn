@@ -22,10 +22,10 @@
 ### Average ranks, train/val loss and train/val accuracy 
 
 
-|s_eff_cnn_id<br><span style='color:red'> **34.00 % FAILED** </span>|s_eff_cnn_hw<br><span style='color:green'>**ALL PASSED** </span>|aisy_mlp_id<br><span style='color:red'> **12.00 % FAILED** </span>|aisy_mlp_hw<br><span style='color:red'> **12.00 % FAILED** </span>|
-|---|---|---|---|
-|![Average Rank](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/average_rank.svg)|![Average Rank](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_hw/average_rank.svg)|![Average Rank](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/average_rank.svg)|![Average Rank](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_hw/average_rank.svg)|
-|![Train Loss](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/train_loss.svg)|![Train Loss](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_hw/train_loss.svg)|![Train Loss](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/train_loss.svg)|![Train Loss](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_hw/train_loss.svg)|
-|![Validation Loss](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/val_loss.svg)|![Validation Loss](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_hw/val_loss.svg)|![Validation Loss](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/val_loss.svg)|![Validation Loss](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_hw/val_loss.svg)|
-|![Train Accuracy](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/train_acc.svg)|![Train Accuracy](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_hw/train_acc.svg)|![Train Accuracy](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/train_acc.svg)|![Train Accuracy](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_hw/train_acc.svg)|
-|![Validation Accuracy](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/val_acc.svg)|![Validation Accuracy](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_hw/val_acc.svg)|![Validation Accuracy](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/val_acc.svg)|![Validation Accuracy](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_hw/val_acc.svg)|
+|s_eff_cnn_id<br><span style='color:red'> **34.00 % FAILED** </span>|aisy_mlp_id<br><span style='color:red'> **12.00 % FAILED** </span>|
+|---|---|
+|![Average Rank](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/average_rank.svg)|![Average Rank](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/average_rank.svg)|
+|![Train Loss](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/train_loss.svg)|![Train Loss](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/train_loss.svg)|
+|![Validation Loss](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/val_loss.svg)|![Validation Loss](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/val_loss.svg)|
+|![Train Accuracy](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/train_acc.svg)|![Train Accuracy](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/train_acc.svg)|
+|![Validation Accuracy](../plots/original/ascad_v1_fk_0_noisy/s_eff_cnn_id/val_acc.svg)|![Validation Accuracy](../plots/original/ascad_v1_fk_0_noisy/aisy_mlp_id/val_acc.svg)|

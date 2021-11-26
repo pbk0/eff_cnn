@@ -365,8 +365,10 @@ class ExperimentType(enum.Enum):
 
 
 MODELS_TO_TRY = [
-    Model.s_eff_cnn_id, Model.s_eff_cnn_hw,
-    Model.aisy_mlp_id, Model.aisy_mlp_hw,
+    Model.s_eff_cnn_id,
+    Model.aisy_mlp_id,
+    # Model.s_eff_cnn_hw,
+    # Model.aisy_mlp_hw,
     # Model.ascad_cnn2,
 ]
 DATASETS_TO_TRY = [
@@ -401,14 +403,14 @@ DEFAULT_PARAMS = {
             epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
             preprocessor=Preprocessor.feature_standardization,
         ),
-        Model.s_eff_cnn_hw: Params(
-            epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
-            preprocessor=Preprocessor.feature_standardization,
-        ),
-        Model.aisy_mlp_hw: Params(
-            epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
-            preprocessor=Preprocessor.feature_standardization,
-        ),
+        # Model.s_eff_cnn_hw: Params(
+        #     epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
+        #     preprocessor=Preprocessor.feature_standardization,
+        # ),
+        # Model.aisy_mlp_hw: Params(
+        #     epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
+        #     preprocessor=Preprocessor.feature_standardization,
+        # ),
     },
     Dataset.ascad_v1_fk_0_noisy: {
         Model.s_eff_cnn_id: Params(
@@ -419,34 +421,34 @@ DEFAULT_PARAMS = {
             epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
             preprocessor=Preprocessor.feature_standardization,
         ),
-        Model.s_eff_cnn_hw: Params(
-            epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
-            preprocessor=Preprocessor.feature_standardization,
-        ),
-        Model.aisy_mlp_hw: Params(
-            epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
-            preprocessor=Preprocessor.feature_standardization,
-        ),
+        # Model.s_eff_cnn_hw: Params(
+        #     epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
+        #     preprocessor=Preprocessor.feature_standardization,
+        # ),
+        # Model.aisy_mlp_hw: Params(
+        #     epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
+        #     preprocessor=Preprocessor.feature_standardization,
+        # ),
     },
     Dataset.ascad_v1_vk_0: {
         Model.ascad_cnn2: Params(
             epochs=75, batch_size=200, learning_rate=0.00001, one_cycle_lr=False,
             preprocessor=Preprocessor.none,
         ),
-        Model.aisy_mlp_hw: Params(
-            epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
-            preprocessor=Preprocessor.feature_standardization,
-        ),
+        # Model.aisy_mlp_hw: Params(
+        #     epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
+        #     preprocessor=Preprocessor.feature_standardization,
+        # ),
         Model.aisy_mlp_id: Params(
             epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
             preprocessor=Preprocessor.feature_standardization,
         ),
     },
     Dataset.ascad_v1_vk_0_noisy: {
-        Model.aisy_mlp_hw: Params(
-            epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
-            preprocessor=Preprocessor.feature_standardization,
-        ),
+        # Model.aisy_mlp_hw: Params(
+        #     epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
+        #     preprocessor=Preprocessor.feature_standardization,
+        # ),
         Model.aisy_mlp_id: Params(
             epochs=50, batch_size=32, learning_rate=5e-4, one_cycle_lr=False,
             preprocessor=Preprocessor.feature_standardization,
@@ -469,10 +471,10 @@ DEFAULT_PARAMS = {
             epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
             preprocessor=Preprocessor.horizontal_standardization,
         ),
-        Model.s_eff_cnn_hw: Params(
-            epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
-            preprocessor=Preprocessor.horizontal_standardization,
-        ),
+        # Model.s_eff_cnn_hw: Params(
+        #     epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
+        #     preprocessor=Preprocessor.horizontal_standardization,
+        # ),
     },
     Dataset.ascad_v1_fk_100: {
         Model.ascad_mlp: Params(
@@ -491,10 +493,10 @@ DEFAULT_PARAMS = {
             epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
             preprocessor=Preprocessor.horizontal_standardization,
         ),
-        Model.s_eff_cnn_hw: Params(
-            epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
-            preprocessor=Preprocessor.horizontal_standardization,
-        ),
+        # Model.s_eff_cnn_hw: Params(
+        #     epochs=50, batch_size=50, learning_rate=5e-3, one_cycle_lr=True,
+        #     preprocessor=Preprocessor.horizontal_standardization,
+        # ),
     },
     Dataset.aes_hd: {
         Model.eff_cnn: Params(
